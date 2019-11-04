@@ -1,4 +1,7 @@
-
+#Name: UNHCR_Analysis
+#Preparer: Saptarshi Datta
+#Date: Nov 3, 2019
+#Data Source: http://popstats.unhcr.org/en/asylum_seekers_monthly
 import pandas as pd
 import numpy as np
 from scipy.stats import stats
@@ -9,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import pie, axis, show
 from datetime import datetime
 
-excel_file_path = (r'C:\Users\joy\Documents\Python Scripts\DataIncubator\unhcr_popstats_export_asylum_seekers_monthly.csv')
+excel_file_path = (r'C:\Users\b0589940\Documents\Python Scripts\UNHCR_Data_Analysis-master\UNHCR_Data_Analysis-master\unhcr_popstats_export_asylum_seekers_monthly.csv')
 
 data = pd.read_csv(excel_file_path,sep=',',skiprows=3)
 data['Value'] = data['Value'].replace('*', np.nan)
@@ -24,11 +27,11 @@ data['Value']= data['Value'].astype(int)
 data['Country / territory of asylum/residence']= data['Country / territory of asylum/residence'].astype(str) 
 data['Origin']= data['Origin'].astype(str) 
 data['Month']= data['Month'].astype(str) 
-
+'''
 asylum_year = data.groupby(by=['Year'])['Value'].sum()
 data_year = pd.DataFrame({'Year':asylum_year.index, 'Asylum Applications':asylum_year.values})
 
-#sns.set(style="white", context="talk")
+sns.set(style="white")
 sns.set_context("paper")
 asylum_year_plot = sns.barplot(x='Year',y='Asylum Applications', data=data_year, palette=("Blues_d"))
 asylum_year_plot.set_xticklabels(asylum_year_plot.get_xticklabels(), rotation=90)
@@ -102,7 +105,7 @@ sns.set_context("paper")
 asylum_country_china_plot = sns.barplot(x='Country of Asylum',y='Asylum Applications', data=data_asylum_country_china, palette=("Blues_d"), order=data_asylum_country_china.iloc[0:9,0])
 asylum_country_china_plot.set_xticklabels(asylum_country_china_plot.get_xticklabels(), rotation=90)
 asylum_country_china_plot.set_title('Countries providing shelter to Chinese Asylum Seekers in 2016')
-
+'''
 #German asylum seekers by country of origin in 2016
 asylum_country_year_mask = (data['Year']=='2016') & (data['Country / territory of asylum/residence']=='Germany')
 data_set_asylum_country_year = data.loc[asylum_country_year_mask ]
@@ -112,8 +115,7 @@ data_germany_asylum_country = pd.DataFrame({'Country of Origin':germany_asylum_c
 data_germany_asylum_country = data_germany_asylum_country.sort_values(by=['Asylum Applications'], ascending=False)
 data_germany_asylum_country.reset_index(inplace=True, drop=True)
 
-
-germany_asylum_country_plot = plt.pie(data_germany_asylum_country['Asylum Applications'][:5], labels=data_germany_asylum_country['Country of Origin'][:5],autopct='%1.1f%%');
+plt.pie(data_germany_asylum_country['Asylum Applications'][:5], labels=data_germany_asylum_country['Country of Origin'][:5],autopct='%1.1f%%');
 plt.title('Top 5 Nationalities seeking asylum in Germany in 2016')
 plt.tight_layout()
 plt.axis('equal')
